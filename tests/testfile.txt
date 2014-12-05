@@ -1,0 +1,143 @@
+# each test is of the form
+# @test [test name]
+# @arguments [list of arguments]
+# @input
+#	...
+# @output
+# 	...
+# @end
+#
+# Lines not between @test and @end are ignored
+# The @arguments list is passed to the command.
+# The input and output sections list the verbatim,
+# line-by-line input and expected output, including 
+# whitespace. 
+# Input starts on the next line following
+# @input and continues up to and including the last
+# line before @output.
+# The expected output starts on the next line following
+# @output, and continues up to and including the last line
+# before @end.
+
+@test empty
+@arguments
+@input
+@output
+@end
+
+@test basic
+@arguments
+@input
+a
+b
+a
+@output
+2 a
+1 b
+@end
+
+@test case insensitive
+@arguments -i
+@input
+A
+a
+b
+@output
+2 a
+1 b
+@end
+
+@test case sensitive
+@arguments
+@input
+A
+a
+b
+@output
+1 A
+1 a
+1 b
+@end
+
+@test blank lines -b
+@arguments -b
+@input
+foo
+
+bar
+@output
+1 bar
+1 foo
+@end
+
+#be careful not to trim white spaces in test driver
+@test blank lines !-b
+@arguments
+@input
+foo
+
+bar
+@output
+1 
+1 bar
+1 foo
+@end
+
+
+@test no counts
+@arguments -u
+@input
+a
+a
+@output
+a
+@end
+
+@test fractions
+@arguments -f
+@input
+foo
+foo
+bar
+foo
+@output
+3 0.75 foo
+1 0.25 bar
+@end
+
+#should compare only the first -wn characters
+@test truncation
+@arguments -w3
+@input
+abcdef
+fghi
+abccba
+@output
+2 abc
+1 fgh
+@end
+
+@test reverse
+@arguments -r
+@input
+a
+b
+c
+a
+@output
+1 c
+1 b
+2 a
+@end
+
+@test sort by string
+@arguments -t
+@input
+b
+a
+b
+b
+@output
+1 a
+3 b
+@end
